@@ -17,6 +17,9 @@ class BlockGrid {
   }
 
   render(el = document.getElementById('gridEl')) {
+    while (el.firstChild) {
+      el.removeChild(el.firstChild);
+    }
     for (let x = 0; x < this.width; x++) {
       const id = 'col_' + x;
       const colEl = document.createElement('div');
@@ -32,15 +35,39 @@ class BlockGrid {
         blockEl.id = id;
         blockEl.className = 'block';
         blockEl.style.background = block.colour;
-        blockEl.addEventListener('click', evt => this.blockClicked(evt, block));
+        if(block.colour !== 'transparent'){
+          blockEl.addEventListener('click', evt => this.blockClicked(evt, block));
+        }
         colEl.appendChild(blockEl);
       }
     }
   }
 
   blockClicked(e, block) {
-    console.log(e, block);
-    const allConnectedBlocks = this.getConnectedBlocks(block);
+    const connectedBlocksByCol = this.getConnectedBlocks(block).reduce( (byColumns, col) => {
+      if (!byColumns[col['x']]) { 
+        byColumns[col['x']] = []; 
+      }
+      byColumns[col['x']].push(col);
+      return byColumns;
+    }, {})
+
+    Object.keys(connectedBlocksByCol).map( (key, index) => {
+
+      connectedBlocksByCol[key].sort((a, b) => (a.y < b.y) ? 1 : -1);
+
+      connectedBlocksByCol[key].forEach(block => {
+        block.hide();
+        this.grid[key].splice(block.y, 1);
+        this.grid[key].push(block);
+      })
+
+      for (let y = this.height - 1; y >= 0; y--) {
+        this.grid[key][y].y = y;
+      }
+    })
+
+    this.render();
   }
 
   getConnectedBlocks(block, allConnectedArr = []){
