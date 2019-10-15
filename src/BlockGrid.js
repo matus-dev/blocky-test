@@ -44,11 +44,11 @@ class BlockGrid {
   }
 
   blockClicked(e, block) {
-    this.handleClickLogic(block);
+    this.updateGrid(block);
     this.render();
   }
 
-  handleClickLogic(block){
+  updateGrid(block){
     const connectedBlocksByCol = this.getConnectedBlocks(block).reduce( (byColumns, col) => {
       if (!byColumns[col['x']]) { 
         byColumns[col['x']] = []; 
@@ -57,7 +57,7 @@ class BlockGrid {
       return byColumns;
     }, {})
 
-    Object.keys(connectedBlocksByCol).map( (key, index) => {
+    Object.keys(connectedBlocksByCol).map( (key) => {
 
       connectedBlocksByCol[key].sort((a, b) => (a.y < b.y) ? 1 : -1);
 
