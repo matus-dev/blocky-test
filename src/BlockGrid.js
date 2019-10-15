@@ -40,6 +40,29 @@ class BlockGrid {
 
   blockClicked(e, block) {
     console.log(e, block);
+    const allConnectedBlocks = this.getConnectedBlocks(block);
+  }
+
+  getConnectedBlocks(block, allConnectedArr = []){
+
+    allConnectedArr.push(block)
+
+    const sides = [      
+      { x: block.x - 1, y: block.y }, //left
+      { x: block.x + 1, y: block.y }, //right
+      { x: block.x, y: block.y + 1 }, //top
+      { x: block.x, y: block.y - 1 }  //bottom
+    ]
+
+    sides.forEach(side => {
+      if(this.grid[side.x] && this.grid[side.x][side.y]){
+        if(!allConnectedArr.includes(this.grid[side.x][side.y]) && block.colour === this.grid[side.x][side.y].colour){
+          allConnectedArr.concat(this.getConnectedBlocks(this.grid[side.x][side.y], allConnectedArr));
+        }
+      }      
+    })
+
+    return allConnectedArr;
   }
 }
 
