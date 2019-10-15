@@ -44,6 +44,11 @@ class BlockGrid {
   }
 
   blockClicked(e, block) {
+    this.handleClickLogic(block);
+    this.render();
+  }
+
+  handleClickLogic(block){
     const connectedBlocksByCol = this.getConnectedBlocks(block).reduce( (byColumns, col) => {
       if (!byColumns[col['x']]) { 
         byColumns[col['x']] = []; 
@@ -66,8 +71,6 @@ class BlockGrid {
         this.grid[key][y].y = y;
       }
     })
-
-    this.render();
   }
 
   getConnectedBlocks(block, allConnectedArr = []){

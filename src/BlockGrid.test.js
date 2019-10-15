@@ -47,11 +47,11 @@ describe('BlockGrid', () => {
     grid[0][1].colour = 'red';
     grid[0][2].colour = 'green';
 
-    blockGrid.blockClicked(new MouseEvent('click'), grid[0][1]);
+    blockGrid.handleClickLogic(grid[0][1]);
 
     expect(grid[0][0].colour).toBe('green');
     expect(grid[0][1].colour).toBe('transparent');
-    expect(grid[0][1].colour).toBe('transparent');
+    expect(grid[0][2].colour).toBe('transparent');
   })
 
   xit('good luck, have fun!', () => {});
