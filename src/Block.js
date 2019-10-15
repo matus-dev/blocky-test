@@ -6,6 +6,10 @@ class Block {
     this.y = y;
     this.colour = COLOURS[Math.floor(Math.random() * COLOURS.length)];
   }
+
+  hide(){
+    this.colour = "transparent";
+  }
 }
 
 export default Block;
