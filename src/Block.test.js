@@ -15,6 +15,6 @@ describe('Block', () => {
   it('"hide" function should set colour of block to transparent', () => {
     const block = new Block([0,0]);
     block.hide();
-    expect(block.colour).toBe("transparent")
+    expect(block.colour).toBe('transparent')
   })
 });

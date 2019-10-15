@@ -24,5 +24,35 @@ describe('BlockGrid', () => {
     });
   });
 
+  it('finds all connected blocks with same colour', () => {
+    const grid = new BlockGrid(1,3).grid;
+
+    grid[0][0].colour = 'red';
+    grid[0][1].colour = 'red';
+    grid[0][2].colour = 'green';
+
+    const connectedBlocksArr = grid.getConnectedBlocks(grid[0][1]);
+
+    expect(connectedBlocksArr.length).toBe(2)
+    connectedBlocksArr.forEach(block => {
+      expect(block.colour).toBe('red')
+    })   
+
+  })
+
+  it('hides all connected blocks and applies "gravity", hidden block moves on top of the grid', () => {
+    const grid = new BlockGrid(1,3).grid;
+
+    grid[0][0].colour = 'red';
+    grid[0][1].colour = 'red';
+    grid[0][2].colour = 'green';
+
+    grid.blockCliked(grid[0][1]);
+
+    expect(grid[0][0].colour).toBe('green');
+    expect(grid[0][1].colour).toBe('transparent');
+    expect(grid[0][1].colour).toBe('transparent');
+  })
+
   xit('good luck, have fun!', () => {});
 });
