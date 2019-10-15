@@ -31,13 +31,31 @@ describe('BlockGrid', () => {
     grid[0][1].colour = 'red';
     grid[0][2].colour = 'green';
 
-    const connectedBlocksArr = blockGrid.getConnectedBlocks(grid[0][1]);
+    const connectedBlocksArr = blockGrid.getAllConnectedBlocks(grid[0][1]);
 
     expect(connectedBlocksArr.length).toBe(2)
     connectedBlocksArr.forEach(block => {
       expect(block.colour).toBe('red')
-    })   
+    })
+  })
 
+  it('sorts connected blocks by column', () => {
+    const blockGrid = new BlockGrid(2,2);
+    const grid = blockGrid.grid;
+    grid[0][0].colour = 'red';
+    grid[0][1].colour = 'green';
+    grid[1][0].colour = 'red';
+    grid[1][1].colour = 'green';
+
+    const expectedResult = {
+      0: [grid[0][0]],
+      1: [grid[1][0]]
+    }
+
+    const connectedBlocksArr = blockGrid.getAllConnectedBlocks(grid[0][0]);
+    const result = blockGrid.sortByColumn(connectedBlocksArr);
+
+    expect(result).toStrictEqual(expectedResult);
   })
 
   it('hides all connected blocks and applies "gravity", hidden block moves on top of the grid', () => {
@@ -47,7 +65,9 @@ describe('BlockGrid', () => {
     grid[0][1].colour = 'red';
     grid[0][2].colour = 'green';
 
-    blockGrid.updateGrid(grid[0][1]);
+    const connectedBlocksArr = blockGrid.getAllConnectedBlocks(grid[0][0]);
+    const result = blockGrid.sortByColumn(connectedBlocksArr);
+    blockGrid.updateGrid(result);
 
     expect(grid[0][0].colour).toBe('green');
     expect(grid[0][1].colour).toBe('transparent');

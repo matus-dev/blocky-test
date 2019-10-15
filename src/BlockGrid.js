@@ -44,18 +44,13 @@ class BlockGrid {
   }
 
   blockClicked(e, block) {
-    this.updateGrid(block);
+    const allConnectedBlocks = this.getAllConnectedBlocks(block);
+    const connectedBlocksByCol = this.sortByColumn(allConnectedBlocks);
+    this.updateGrid(connectedBlocksByCol);
     this.render();
-  }
+  }  
 
-  updateGrid(block){
-    const connectedBlocksByCol = this.getConnectedBlocks(block).reduce( (byColumns, col) => {
-      if (!byColumns[col['x']]) { 
-        byColumns[col['x']] = []; 
-      }
-      byColumns[col['x']].push(col);
-      return byColumns;
-    }, {})
+  updateGrid(connectedBlocksByCol){   
 
     Object.keys(connectedBlocksByCol).map( (key) => {
 
@@ -73,7 +68,18 @@ class BlockGrid {
     })
   }
 
-  getConnectedBlocks(block, allConnectedArr = []){
+  sortByColumn(blocksArr){
+    const blocksByColumn =  blocksArr.reduce( (byColumns, col) => {
+      if (!byColumns[col['x']]) { 
+        byColumns[col['x']] = []; 
+      }
+      byColumns[col['x']].push(col);
+      return byColumns;
+    }, {})
+    return blocksByColumn;
+  }
+
+  getAllConnectedBlocks(block, allConnectedArr = []){
 
     allConnectedArr.push(block)
 
@@ -87,7 +93,7 @@ class BlockGrid {
     sides.forEach(side => {
       if(this.grid[side.x] && this.grid[side.x][side.y]){
         if(!allConnectedArr.includes(this.grid[side.x][side.y]) && block.colour === this.grid[side.x][side.y].colour){
-          allConnectedArr.concat(this.getConnectedBlocks(this.grid[side.x][side.y], allConnectedArr));
+          allConnectedArr.concat(this.getAllConnectedBlocks(this.grid[side.x][side.y], allConnectedArr));
         }
       }      
     })
